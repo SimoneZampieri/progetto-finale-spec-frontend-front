@@ -8,16 +8,24 @@ const Home = () => {
   const { coaster, loading, error } = context;
 
   if (loading)
-    return <div className="text-center py-8">Finisco il giro...</div>;
+    return (
+      <div className="text-center font-luckiest py-8">Finisco il giro...</div>
+    );
   if (error)
-    return <div className="text-center py-8 text-red-500">{error}</div>;
+    return (
+      <div className="text-center font-luckiest  py-8 text-red-500">
+        {error}
+      </div>
+    );
 
   // Add a safety check for coaster
   const coasterList = coaster || [];
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 text-center">Lista Coasters</h1>
+      <h1 className="text-3xl font-bold font-luckiest mb-6 text-center">
+        Lista Coasters
+      </h1>
 
       {coasterList.length === 0 ? (
         <p className="text-center">Nessun coaster trovato.</p>
@@ -28,16 +36,20 @@ const Home = () => {
               key={item.id}
               className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
             >
-              <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
-              <p className="text-gray-600 mb-4">Categoria: {item.category}</p>
+              <h2 className="text-xl font-semibold font-luckiest mb-2">
+                {item.title}
+              </h2>
+              <p className="text-gray-600 font-luckiest mb-4">
+                Categoria: {item.category}
+              </p>
               <div className="flex flex-wrap gap-2">
-                <button className="bg-orange-500 text-black px-3 py-1 rounded hover:bg-orange-700">
+                <button className="bg-orange-500 text-black font-luckiest px-3 py-1 rounded hover:bg-orange-700">
                   Vedi dettagli
                 </button>
-                <button className="bg-green-500 text-black px-3 py-1 rounded hover:bg-green-600">
+                <button className="bg-green-500 text-black font-luckiest px-3 py-1 rounded hover:bg-green-600">
                   Confronta
                 </button>
-                <button className="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600">
+                <button className="bg-purple-500 text-white font-luckiest px-3 py-1 rounded hover:bg-purple-600">
                   Aggiungi ai Preferiti
                 </button>
               </div>

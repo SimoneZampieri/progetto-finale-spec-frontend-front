@@ -16,17 +16,23 @@ export const Layout = ({ children }) => {
           <nav>
             <ul className="flex space-x-6">
               <li>
-                <Link to="/" className="hover:text-blue-200">
+                <Link to="/" className="hover:text-blue-200 font-luckiest">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/compare" className="hover:text-blue-200">
+                <Link
+                  to="/compare"
+                  className="hover:text-blue-200 font-luckiest"
+                >
                   Confronta
                 </Link>
               </li>
               <li>
-                <Link to="/favorites" className="hover:text-blue-200">
+                <Link
+                  to="/favorites"
+                  className="hover:text-blue-200 font-luckiest"
+                >
                   Preferiti
                 </Link>
               </li>

@@ -1,1 +1,14 @@
-@import 'tailwindcss'
+@import 'tailwindcss';
+
+.font-luckiest {
+    font-family: 'Luckiest Guy', cursive;
+  }
+  
+  .font-roboto {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* Apply Roboto as the default body font */
+  body {
+    font-family: 'Roboto', sans-serif;
+  }
