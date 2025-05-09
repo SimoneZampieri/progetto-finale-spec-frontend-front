@@ -13,7 +13,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/compare" element={<div>Pagina di confronto</div>} />
             <Route path="/favorites" element={<div>Pagina Preferiti</div>} />
-            <Route path="/rollercoasters/:id" element={<DetailPage />} />
+            <Route path="/rollercoaster/:id" element={<DetailPage />} />
             <Route path="*" element={<div> Pagina non trovata </div>} />
           </Routes>
         </Layout>
