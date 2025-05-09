@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Layout } from "./layout/DefLayout";
 import { GlobalProvider } from "./context/GlobalContext";
 import Home from "./pages/Home";
+import DetailPage from "./pages/DetailPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/compare" element={<div>Pagina di confronto</div>} />
             <Route path="/favorites" element={<div>Pagina Preferiti</div>} />
+            <Route path="/rollercoasters/:id" element={<DetailPage />} />
             <Route path="*" element={<div> Pagina non trovata </div>} />
           </Routes>
         </Layout>

@@ -1,5 +1,6 @@
 import React from "react";
 import { useGlobalContext } from "../context/GlobalContext";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   // Make sure useGlobalContext() is being called correctly
@@ -18,7 +19,6 @@ const Home = () => {
       </div>
     );
 
-  // Add a safety check for coaster
   const coasterList = coaster || [];
 
   return (
@@ -43,9 +43,12 @@ const Home = () => {
                 Categoria: {item.category}
               </p>
               <div className="flex flex-wrap gap-2">
-                <button className="bg-orange-500 text-black font-luckiest px-3 py-1 rounded hover:bg-orange-700">
+                <Link
+                  to={`/rollercoasters/${item.id}`}
+                  className="bg-orange-500 text-black font-luckiest px-3 py-1 rounded hover:bg-orange-700"
+                >
                   Vedi dettagli
-                </button>
+                </Link>
                 <button className="bg-green-500 text-black font-luckiest px-3 py-1 rounded hover:bg-green-600">
                   Confronta
                 </button>

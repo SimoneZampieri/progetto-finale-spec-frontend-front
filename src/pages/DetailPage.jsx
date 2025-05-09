@@ -14,6 +14,7 @@ const DetailPage = () => {
       try {
         setLoading(true);
         const API_URL = import.meta.env.VITE_API_URL;
+        console.log("Fetching from:", `${API_URL}/rollercoasters/${id}`);
         const response = await fetch(`${API_URL}/rollercoasters/${id}`);
 
         if (!response.ok) {
@@ -21,7 +22,13 @@ const DetailPage = () => {
         }
 
         const data = await response.json();
-        setCoasterDetail(data);
+        console.log("Coaster detail data:", data);
+        if (data && data.success && data.rollercoaster) {
+          setCoasterDetail(data.rollercoaster);
+        } else {
+          throw new Error("Dati del coaster non validi");
+        }
+
         setError(null);
       } catch (err) {
         console.error("errore nel caricamento dettagli", err);
@@ -56,16 +63,25 @@ const DetailPage = () => {
       <div className="md:flex">
         <div className="md:flex-shrink-0">
           {coasterDetail.img ? (
-            <img
-              className="h-48 w-full object-cover md:w-48"
-              src={coasterDetail.img}
-              alt={coasterDetail.title}
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src =
-                  "https://via.placeholder.com/400x300?text=Immagine+Non+Disponibile";
-              }}
-            />
+            <>
+              {console.log(
+                "Image URL:",
+                `${import.meta.env.VITE_API_URL}${coasterDetail.img}`
+              )}
+              <img
+                className="h-48 w-full object-cover md:w-48"
+                src={`${import.meta.env.VITE_API_URL}/public/${
+                  coasterDetail.img
+                }`}
+                alt={coasterDetail.title}
+                onError={(e) => {
+                  console.log("Image failed to load:", e.target.src);
+                  e.target.onerror = null;
+                  e.target.src =
+                    "https://placehold.co/400x300/gray/white?text=No+Image";
+                }}
+              />
+            </>
           ) : (
             <div className="h-48 w-full bg-gray-200 flex items-center justify-center md:w-48">
               <span className="text-gray-500">Nessuna immagine</span>
