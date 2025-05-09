@@ -1,12 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useGlobalContext } from "../context/GlobalContext";
 import { Link } from "react-router-dom";
+import SearchBar from "../components/SearchBar";
 
 const Home = () => {
-  // Make sure useGlobalContext() is being called correctly
   const context = useGlobalContext();
-
   const { coaster, loading, error } = context;
+  
+  const [filteredCoasters, setFilteredCoasters] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    if (coaster) {
+      setFilteredCoasters(coaster);
+      
+      // Extract unique categories
+      const uniqueCategories = [...new Set(coaster.map(item => item.category))];
+      setCategories(uniqueCategories);
+    }
+  }, [coaster]);
+
+  const handleSearch = ({ searchTerm, category }) => {
+    if (!coaster) return;
+    
+    let results = [...coaster];
+    
+    // Filter by search term
+    if (searchTerm) {
+      results = results.filter(item => 
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    // Filter by category
+    if (category) {
+      results = results.filter(item => item.category === category);
+    }
+    
+    setFilteredCoasters(results);
+  };
 
   if (loading)
     return (
@@ -14,12 +46,12 @@ const Home = () => {
     );
   if (error)
     return (
-      <div className="text-center font-luckiest  py-8 text-red-500">
+      <div className="text-center font-luckiest py-8 text-red-500">
         {error}
       </div>
     );
 
-  const coasterList = coaster || [];
+  const coasterList = filteredCoasters || [];
 
   return (
     <div>
@@ -27,8 +59,10 @@ const Home = () => {
         Lista Coasters
       </h1>
 
+      <SearchBar onSearch={handleSearch} categories={categories} />
+
       {coasterList.length === 0 ? (
-        <p className="text-center">Nessun coaster trovato.</p>
+        <p className="text-center font-luckiest">Nessun coaster trovato.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {coasterList.map((item) => (
@@ -44,7 +78,7 @@ const Home = () => {
               </p>
               <div className="flex flex-wrap gap-2">
                 <Link
-                  to={`/rollercoasters/${item.id}`}
+                  to={`/detail/${item.id}`}
                   className="bg-orange-500 text-black font-luckiest px-3 py-1 rounded hover:bg-orange-700"
                 >
                   Vedi dettagli
