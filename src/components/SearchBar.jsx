@@ -108,6 +108,8 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
               onChange={(e) => setSortBy(e.target.value)}
             >
               <option value="">Nessun ordinamento</option>
+              <option value="title_asc">Nome (A-Z)</option>
+              <option value="title_desc">Nome (Z-A)</option>
               <option value="length_asc">Lunghezza (crescente)</option>
               <option value="length_desc">Lunghezza (decrescente)</option>
               <option value="height_asc">Altezza (crescente)</option>

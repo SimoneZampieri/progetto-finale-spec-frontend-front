@@ -11,22 +11,40 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [parks, setParks] = useState([]);
   const [lifts, setLifts] = useState([]);
+  const [favorites, setFavorites] = useState(() => {
+    //inizializzo favorites con i coaster salvati nel localStorage
+    const savedFavorites = localStorage.getItem("favoriteCoasters");
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
+
+  //funzione per aggoingere/rimuovere dai preferiti
+  const toggleFavorite = (coasterId) => {
+    setFavorites((prevFavorites) => {
+      let newFavorites;
+      if (prevFavorites.includes(coasterId)) {
+        //rimozione
+        newFavorites = prevFavorites.filter((id) => id !== coasterId);
+      } else {
+        //aggiunta
+        newFavorites = [...prevFavorites, coasterId];
+      }
+      //salvataggio nel localStorage
+      localStorage.setItem("favoriteCoasters", JSON.stringify(newFavorites));
+      return newFavorites;
+    });
+  };
 
   useEffect(() => {
     if (coaster && coaster.length > 0) {
-      console.log("Coaster data sample:", coaster[0]);
-      console.log("Available properties:", Object.keys(coaster[0]));
-
       setFilteredCoasters(coaster);
 
-      // Only extract properties that exist and are not undefined
+      //check delle categorie
       const uniqueCategories = [
         ...new Set(
           coaster.filter((item) => item.category).map((item) => item.category)
         ),
       ];
 
-      // Check if park property exists in any coaster
       const hasParks = coaster.some((item) => item.park !== undefined);
       const uniqueParks = hasParks
         ? [
@@ -36,7 +54,6 @@ const Home = () => {
           ]
         : [];
 
-      // Check if lift property exists in any coaster
       const hasLifts = coaster.some((item) => item.lift !== undefined);
       const uniqueLifts = hasLifts
         ? [
@@ -46,75 +63,52 @@ const Home = () => {
           ]
         : [];
 
-      console.log("Unique categories:", uniqueCategories);
-      console.log("Unique parks:", uniqueParks, "Has parks:", hasParks);
-      console.log("Unique lifts:", uniqueLifts, "Has lifts:", hasLifts);
-
       setCategories(uniqueCategories);
       setParks(uniqueParks);
       setLifts(uniqueLifts);
     }
   }, [coaster]);
+  //fine check
 
+  //ricerca per titolo, categoria, parco, lift, ordinamento
   const handleSearch = ({ searchTerm, category, park, lift, sortBy }) => {
     if (!coaster) return;
 
-    console.log("Search params:", { searchTerm, category, park, lift, sortBy });
-    console.log("Initial coasters:", coaster.length);
-
     let results = [...coaster];
 
-    // Filter by search term
     if (searchTerm && searchTerm.trim() !== "") {
       results = results.filter(
         (item) =>
           item.title &&
           item.title.toLowerCase().includes(searchTerm.toLowerCase().trim())
       );
-      console.log("After title filter:", results.length);
     }
 
-    // Filter by category
     if (category && category !== "") {
       results = results.filter((item) => item.category === category);
-      console.log("After category filter:", results.length);
+      c;
     }
 
-    // Filter by park
     if (park && park !== "") {
-      // Log all unique park values in the current results
       const currentParks = [...new Set(results.map((item) => item.park))];
-      console.log("Available parks in current results:", currentParks);
-      console.log("Filtering for park:", park);
 
       results = results.filter((item) => item.park === park);
-      console.log("After park filter:", results.length);
     }
 
-    // Filter by lift
     if (lift && lift !== "") {
-      // Log all unique lift values in the current results
       const currentLifts = [...new Set(results.map((item) => item.lift))];
-      console.log("Available lifts in current results:", currentLifts);
-      console.log("Filtering for lift:", lift);
 
       results = results.filter((item) => item.lift === lift);
-      console.log("After lift filter:", results.length);
     }
 
-    // Sort results
     if (sortBy && sortBy !== "") {
-      console.log("Sorting by:", sortBy);
-
-      // Log the values before sorting
-      console.log("Values before sorting:");
-      results.slice(0, 5).forEach((item, i) => {
-        console.log(
-          `${i}: ${item.title} - height: ${item.height}, length: ${item.length}`
-        );
-      });
-
       switch (sortBy) {
+        case "title_asc":
+          results.sort((a, b) => a.title.localeCompare(b.title));
+          break;
+        case "title_desc":
+          results.sort((a, b) => b.title.localeCompare(a.title));
+          break;
         case "length_asc":
           results.sort(
             (a, b) => (Number(a.length) || 0) - (Number(b.length) || 0)
@@ -139,8 +133,7 @@ const Home = () => {
           break;
       }
 
-      // Log the values after sorting
-      console.log("Values after sorting:");
+      console.log("Valori dopo il sort");
       results.slice(0, 5).forEach((item, i) => {
         console.log(
           `${i}: ${item.title} - height: ${item.height}, length: ${item.length}`
@@ -151,6 +144,7 @@ const Home = () => {
     console.log("Final results:", results.length);
     setFilteredCoasters(results);
   };
+  //fine ricerca
 
   if (loading)
     return (
@@ -161,6 +155,7 @@ const Home = () => {
       <div className="text-center font-luckiest py-8 text-red-500">{error}</div>
     );
 
+  //stampa lista coasters
   const coasterList = filteredCoasters || [];
 
   return (
@@ -229,8 +224,18 @@ const Home = () => {
                   <button className="bg-green-500 text-black font-luckiest px-3 py-1 rounded hover:bg-green-600">
                     Confronta
                   </button>
-                  <button className="bg-purple-500 text-white font-luckiest px-3 py-1 rounded hover:bg-purple-600">
-                    Aggiungi ai Preferiti
+                  <button 
+                    className={`${
+                      favorites.includes(item.id) 
+                        ? "bg-purple-700" 
+                        : "bg-purple-500"
+                    } text-white font-luckiest px-3 py-1 rounded hover:bg-purple-600 flex items-center`}
+                    onClick={() => toggleFavorite(item.id)}
+                  >
+                    {favorites.includes(item.id) ? "Rimuovi" : "Aggiungi ai Preferiti"}
+                    {favorites.includes(item.id) && (
+                      <span className="ml-1">★</span>
+                    )}
                   </button>
                 </div>
               </div>

@@ -3,6 +3,7 @@ import { Layout } from "./layout/DefLayout";
 import { GlobalProvider } from "./context/GlobalContext";
 import Home from "./pages/Home";
 import DetailPage from "./pages/DetailPage";
+import FavoritesPage from "./pages/FavoritesPage";
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/compare" element={<div>Pagina di confronto</div>} />
-            <Route path="/favorites" element={<div>Pagina Preferiti</div>} />
+            <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/rollercoaster/:id" element={<DetailPage />} />
             <Route path="*" element={<div> Pagina non trovata </div>} />
           </Routes>
