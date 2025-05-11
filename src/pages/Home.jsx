@@ -183,32 +183,56 @@ const Home = () => {
           {coasterList.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
             >
-              <h2 className="text-xl font-semibold font-luckiest mb-2">
-                {item.title}
-              </h2>
-              <div className="text-gray-600 mb-4">
-                <p className="font-luckiest">
-                  Categoria: {item.category || "N/A"}
-                </p>
-                {item.park && <p>Parco: {item.park}</p>}
-                {item.height && <p>Altezza: {item.height} m</p>}
-                {item.length && <p>Lunghezza: {item.length} m</p>}
+              {/* Image section */}
+              <div className="h-48 overflow-hidden">
+                {item.img ? (
+                  <img
+                    src={`/src/assets/${item.img}`}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      console.log("Image failed to load:", e.target.src);
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/400x200/gray/white?text=No+Image";
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-500">Nessuna immagine</span>
+                  </div>
+                )}
               </div>
-              <div className="flex flex-wrap gap-2">
-                <Link
-                  to={`/rollercoaster/${item.id}`}
-                  className="bg-orange-500 text-black font-luckiest px-3 py-1 rounded hover:bg-orange-700"
-                >
-                  Vedi dettagli
-                </Link>
-                <button className="bg-green-500 text-black font-luckiest px-3 py-1 rounded hover:bg-green-600">
-                  Confronta
-                </button>
-                <button className="bg-purple-500 text-white font-luckiest px-3 py-1 rounded hover:bg-purple-600">
-                  Aggiungi ai Preferiti
-                </button>
+
+              {/* Content section */}
+              <div className="p-6">
+                <h2 className="text-xl font-semibold font-luckiest mb-2">
+                  {item.title}
+                </h2>
+                <div className="text-gray-600 mb-4">
+                  <p className="font-luckiest">
+                    Categoria: {item.category || "N/A"}
+                  </p>
+                  {item.park && <p>Parco: {item.park}</p>}
+                  {item.height && <p>Altezza: {item.height} m</p>}
+                  {item.length && <p>Lunghezza: {item.length} m</p>}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Link
+                    to={`/rollercoaster/${item.id}`}
+                    className="bg-orange-500 text-black font-luckiest px-3 py-1 rounded hover:bg-orange-700"
+                  >
+                    Vedi dettagli
+                  </Link>
+                  <button className="bg-green-500 text-black font-luckiest px-3 py-1 rounded hover:bg-green-600">
+                    Confronta
+                  </button>
+                  <button className="bg-purple-500 text-white font-luckiest px-3 py-1 rounded hover:bg-purple-600">
+                    Aggiungi ai Preferiti
+                  </button>
+                </div>
               </div>
             </div>
           ))}

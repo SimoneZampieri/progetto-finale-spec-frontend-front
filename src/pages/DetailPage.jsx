@@ -59,37 +59,31 @@ const DetailPage = () => {
     );
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
       <div className="md:flex">
-        <div className="md:flex-shrink-0">
+        <div className="md:w-1/2">
           {coasterDetail.img ? (
             <>
-              {console.log(
-                "Image URL:",
-                `${import.meta.env.VITE_API_URL}${coasterDetail.img}`
-              )}
               <img
-                className="h-48 w-full object-cover md:w-48"
-                src={`${import.meta.env.VITE_API_URL}/public/${
-                  coasterDetail.img
-                }`}
+                className="h-full w-full object-cover min-h-[400px]"
+                src={`/src/assets/${coasterDetail.img}`}
                 alt={coasterDetail.title}
                 onError={(e) => {
                   console.log("Image failed to load:", e.target.src);
                   e.target.onerror = null;
                   e.target.src =
-                    "https://placehold.co/400x300/gray/white?text=No+Image";
+                    "https://placehold.co/600x400/gray/white?text=No+Image";
                 }}
               />
             </>
           ) : (
-            <div className="h-48 w-full bg-gray-200 flex items-center justify-center md:w-48">
+            <div className="h-full w-full bg-gray-200 flex items-center justify-center min-h-[400px]">
               <span className="text-gray-500">Nessuna immagine</span>
             </div>
           )}
         </div>
 
-        <div className="p-8">
+        <div className="p-8 md:w-1/2">
           <div className="uppercase tracking-wide text-sm text-orange-500 font-semibold">
             {coasterDetail.category}
           </div>
@@ -110,6 +104,8 @@ const DetailPage = () => {
                   {coasterDetail.openingYear}
                 </dd>
               </div>
+              
+              {/* Rest of the details remain the same */}
               <div className="sm:col-span-1">
                 <dt className="text-sm font-medium text-gray-500">
                   Produttore
