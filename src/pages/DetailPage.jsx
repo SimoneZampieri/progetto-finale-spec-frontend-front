@@ -10,16 +10,19 @@ const DetailPage = () => {
   const { coaster } = useGlobalContext();
   const [favorites, setFavorites] = useState(() => {
     //inizializzo i preferiti da localstorage
-    const storedFavorites = localStorage.getItem("favoritesCoasters");
+    const storedFavorites = localStorage.getItem("favoriteCoasters");
     return storedFavorites ? JSON.parse(storedFavorites) : [];
   });
 
   //funzione che aggiunge/rimuove dai preferiti
   const toggleFavorite = (coasterId) => {
+    // converto l'id in stringa
+    const idToToggle = String(coasterId);
+
     setFavorites((prevFavorites) => {
-      const newFavorites = prevFavorites.includes(coasterId)
-        ? prevFavorites.filter((id) => id !== coasterId)
-        : [...prevFavorites, coasterId];
+      const newFavorites = prevFavorites.includes(idToToggle)
+        ? prevFavorites.filter((id) => id !== idToToggle)
+        : [...prevFavorites, idToToggle];
 
       //salvo in localstorage
       localStorage.setItem("favoriteCoasters", JSON.stringify(newFavorites));
@@ -178,14 +181,18 @@ const DetailPage = () => {
             </button>
             <button
               className={`${
-                favorites.includes(id) ? "bg-purple-700" : "bg-purple-500"
+                favorites.includes(String(id))
+                  ? "bg-purple-700"
+                  : "bg-purple-500"
               } text-white px-4 py-2 rounded hover:bg-purple-600 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-purple-600 active:translate-y-1 my-3 flex items-center`}
               onClick={() => toggleFavorite(id)}
             >
-              {favorites.includes(id)
+              {favorites.includes(String(id))
                 ? "Rimuovi dai preferiti"
                 : "Aggiungi ai preferiti"}
-              {favorites.includes(id) && <span className="ml-1">★</span>}
+              {favorites.includes(String(id)) && (
+                <span className="ml-1">★</span>
+              )}
             </button>
             <Link
               to="/"
