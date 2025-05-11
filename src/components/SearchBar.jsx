@@ -21,7 +21,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md mb-6">
       <form onSubmit={handleSearch} className="space-y-4">
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col md:flex-row gap-4 items-center">
           <div className="flex-grow">
             <input
               type="text"
@@ -34,7 +34,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
 
           <button
             type="submit"
-            className="px-6 py-2 bg-orange-500 text-white font-luckiest rounded-md hover:bg-orange-600 transition-colors"
+            className="px-6 py-2 bg-orange-500 text-white font-luckiest rounded-md hover:bg-orange-600 transition-colors drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-orange-600 active:translate-y-1 cursor-pointer"
           >
             Cerca
           </button>
@@ -103,7 +103,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
               Ordina per
             </label>
             <select
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 "
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
             >

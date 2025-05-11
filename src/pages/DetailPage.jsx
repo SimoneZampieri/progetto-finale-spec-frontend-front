@@ -8,13 +8,29 @@ const DetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { coaster } = useGlobalContext();
+  const [favorites, setFavorites] = useState(() => {
+    //inizializzo i preferiti da localstorage
+    const storedFavorites = localStorage.getItem("favoritesCoasters");
+    return storedFavorites ? JSON.parse(storedFavorites) : [];
+  });
 
+  //funzione che aggiunge/rimuove dai preferiti
+  const toggleFavorite = (coasterId) => {
+    setFavorites((prevFavorites) => {
+      const newFavorites = prevFavorites.includes(coasterId)
+        ? prevFavorites.filter((id) => id !== coasterId)
+        : [...prevFavorites, coasterId];
+
+      //salvo in localstorage
+      localStorage.setItem("favoriteCoasters", JSON.stringify(newFavorites));
+      return newFavorites;
+    });
+  };
   useEffect(() => {
     const fetchCoasterDetail = async () => {
       try {
         setLoading(true);
         const API_URL = import.meta.env.VITE_API_URL;
-        console.log("Fetching from:", `${API_URL}/rollercoasters/${id}`);
         const response = await fetch(`${API_URL}/rollercoasters/${id}`);
 
         if (!response.ok) {
@@ -104,7 +120,7 @@ const DetailPage = () => {
                   {coasterDetail.openingYear}
                 </dd>
               </div>
-              
+
               {/* Rest of the details remain the same */}
               <div className="sm:col-span-1">
                 <dt className="text-sm font-medium text-gray-500">
@@ -157,15 +173,23 @@ const DetailPage = () => {
           </div>
 
           <div className="mt-8 flex space-x-4">
-            <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-green-600 active:translate-y-1 my-3">
               Aggiungi al confronto
             </button>
-            <button className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">
-              Aggiungi ai preferiti
+            <button
+              className={`${
+                favorites.includes(id) ? "bg-purple-700" : "bg-purple-500"
+              } text-white px-4 py-2 rounded hover:bg-purple-600 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-purple-600 active:translate-y-1 my-3 flex items-center`}
+              onClick={() => toggleFavorite(id)}
+            >
+              {favorites.includes(id)
+                ? "Rimuovi dai preferiti"
+                : "Aggiungi ai preferiti"}
+              {favorites.includes(id) && <span className="ml-1">★</span>}
             </button>
             <Link
               to="/"
-              className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300"
+              className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-gray-600 active:translate-y-1 my-3"
             >
               Torna alla lista
             </Link>

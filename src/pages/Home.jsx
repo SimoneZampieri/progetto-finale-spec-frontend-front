@@ -11,28 +11,6 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [parks, setParks] = useState([]);
   const [lifts, setLifts] = useState([]);
-  const [favorites, setFavorites] = useState(() => {
-    //inizializzo favorites con i coaster salvati nel localStorage
-    const savedFavorites = localStorage.getItem("favoriteCoasters");
-    return savedFavorites ? JSON.parse(savedFavorites) : [];
-  });
-
-  //funzione per aggoingere/rimuovere dai preferiti
-  const toggleFavorite = (coasterId) => {
-    setFavorites((prevFavorites) => {
-      let newFavorites;
-      if (prevFavorites.includes(coasterId)) {
-        //rimozione
-        newFavorites = prevFavorites.filter((id) => id !== coasterId);
-      } else {
-        //aggiunta
-        newFavorites = [...prevFavorites, coasterId];
-      }
-      //salvataggio nel localStorage
-      localStorage.setItem("favoriteCoasters", JSON.stringify(newFavorites));
-      return newFavorites;
-    });
-  };
 
   useEffect(() => {
     if (coaster && coaster.length > 0) {
@@ -217,25 +195,12 @@ const Home = () => {
                 <div className="flex flex-wrap gap-2">
                   <Link
                     to={`/rollercoaster/${item.id}`}
-                    className="bg-orange-500 text-black font-luckiest px-3 py-1 rounded hover:bg-orange-700"
+                    className="bg-orange-500 text-black font-luckiest px-3 py-1 rounded hover:bg-orange-700 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-orange-600 active:translate-y-1 my-3"
                   >
                     Vedi dettagli
                   </Link>
-                  <button className="bg-green-500 text-black font-luckiest px-3 py-1 rounded hover:bg-green-600">
+                  <button className="bg-green-500 text-black font-luckiest px-3 py-1 rounded hover:bg-green-600 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-green-600 active:translate-y-1 my-3">
                     Confronta
-                  </button>
-                  <button 
-                    className={`${
-                      favorites.includes(item.id) 
-                        ? "bg-purple-700" 
-                        : "bg-purple-500"
-                    } text-white font-luckiest px-3 py-1 rounded hover:bg-purple-600 flex items-center`}
-                    onClick={() => toggleFavorite(item.id)}
-                  >
-                    {favorites.includes(item.id) ? "Rimuovi" : "Aggiungi ai Preferiti"}
-                    {favorites.includes(item.id) && (
-                      <span className="ml-1">★</span>
-                    )}
                   </button>
                 </div>
               </div>

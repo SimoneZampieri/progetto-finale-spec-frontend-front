@@ -103,12 +103,12 @@ const FavoritesPage = () => {
                 <div className="flex flex-wrap gap-2">
                   <Link
                     to={`/rollercoaster/${item.id}`}
-                    className="bg-orange-500 text-black font-luckiest px-3 py-1 rounded hover:bg-orange-700"
+                    className="bg-orange-500 text-black font-luckiest px-3 py-1 rounded hover:bg-orange-700 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-orange-600 active:translate-y-1 my-3 cursor-pointer"
                   >
                     Vedi dettagli
                   </Link>
                   <button
-                    className="bg-red-500 text-white font-luckiest px-3 py-1 rounded hover:bg-red-600 flex items-center"
+                    className="bg-red-500 text-white font-luckiest px-3 py-1 rounded hover:bg-red-600 flex items-center drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-red-600 active:translate-y-1 my-3 cursor-pointer"
                     onClick={() => removeFromFavorites(item.id)}
                   >
                     Rimuovi dai preferiti
