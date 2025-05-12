@@ -17,12 +17,30 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <section className="relative h-[70vh] bg-gradient-to-r from-orange-600 to-orange-400 overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-30"></div>
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          <video
+            className="absolute w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+          >
+            <source src="/videobackground.mp4" type="video/mp4" />
+            Il tuo browser non supporta il tag video!
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-600/70 to-orange-400/70 mix-blend-overlay"></div>
+          <div className="absolute inset-0 bg-black opacity-30"></div>
+        </div>
+
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center px-4 max-w-4xl">
-            <h1 className="text-5xl md:text-7xl font-luckiest text-white mb-6 drop-shadow-[3px_3px_0px_rgba(0,0,0,0.5)]">
-              Coaster Compare
-            </h1>
+            <div className="flex justify-center mb-6">
+              <img
+                src="/coastercomparelogo.png"
+                alt="Coaster Compare Logo"
+                className="h-60 w-auto drop-shadow-[3px_3px_0px_rgba(0,0,0,0.5)]"
+              />
+            </div>
             <p className="text-xl md:text-2xl text-white mb-8 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)]">
               Confronta le montagne russe più emozionanti del mondo e scopri
               quale ti farà battere il cuore più forte!
