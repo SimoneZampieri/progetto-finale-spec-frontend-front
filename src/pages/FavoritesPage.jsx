@@ -18,7 +18,7 @@ const FavoritesPage = () => {
     //filtro i coaster per quelli che sono fra i preferiti
     if (coaster && coaster.length > 0) {
       const filteredCoasters = coaster.filter((item) =>
-        favorites.includes(item.id)
+        favorites.includes(String(item.id))
       );
       setFavoriteCoasters(filteredCoasters);
     } else {
@@ -29,7 +29,8 @@ const FavoritesPage = () => {
 
   //funzione che rimuove dai preferiti
   const removeFromFavorites = (coasterId) => {
-    const newFavorites = favorites.filter((id) => id !== coasterId);
+    const idToRemove = String(coasterId);
+    const newFavorites = favorites.filter((id) => id !== idToRemove);
     setFavorites(newFavorites);
     localStorage.setItem("favoriteCoasters", JSON.stringify(newFavorites));
   };
