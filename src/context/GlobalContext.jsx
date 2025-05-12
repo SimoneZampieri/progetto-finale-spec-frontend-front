@@ -9,6 +9,13 @@ export const GlobalProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  //stato per comparazione
+  const [comparisonList, setComparisonList] = useState(() => {
+    //inizializzo la lista dei preferiti da localstorage
+    const storedComparisonList = localStorage.getItem("comparisonCoasters");
+    return storedComparisonList ? JSON.parse(storedComparisonList) : [];
+  });
+
   //url della API
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -24,7 +31,6 @@ export const GlobalProvider = ({ children }) => {
         throw new Error(`Risposta negativa: ${response.status}`);
       }
 
-      // Parse the JSON response
       let data = await response.json();
       console.log("API Response:", data);
 
@@ -33,31 +39,30 @@ export const GlobalProvider = ({ children }) => {
         Promises.push(fetch(`${API_URL}/${resourceType}/${coaster.id}`));
       });
 
-      // Get detailed data for each coaster
+      // prendo i dettagli da ogni coaster e li aggiungo
       const detailedResponses = await Promise.all(Promises).then(
         (responses) => {
           return Promise.all(responses.map((response) => response.json()));
         }
       );
 
-      // Extract the actual coaster data from the response structure
+      // estraggo i dati del coaster
       const extractedData = detailedResponses.map((item) => {
-        // Check if the data is nested inside a rollercoaster property
+        // check se i dati sono annidati all'interno di rollercoaster
         if (item.rollercoaster) {
           return item.rollercoaster;
         }
-        return item; // Fallback if structure is different
+        return item;
       });
 
       console.log("Extracted coaster data:", extractedData[0]);
 
-      // Update data with the extracted detailed information
+      // aggiorno data con le info dettagliate
       data = extractedData;
 
-      // Check if we have all the required properties in the first item
       if (data.length > 0) {
         console.log("First coaster properties:", Object.keys(data[0]));
-        // Check for missing properties
+
         const expectedProps = [
           "id",
           "title",
@@ -89,11 +94,42 @@ export const GlobalProvider = ({ children }) => {
     fetchCoasters();
   }, []);
 
+  //salvo la lista da comparare in localStorage quando cambia
+  useEffect(() => {
+    localStorage.setItem("comparisonCoasters", JSON.stringify(comparisonList));
+  }, [comparisonList]);
+
+  //aggiungo coaster al comparatore
+  const addToComparison = (coasterId) => {
+    const idToAdd = String(coasterId);
+    setComparisonList((prev) => {
+      if (prev.includes(idToAdd)) {
+        return prev;
+      }
+      return [...prev, idToAdd];
+    });
+  };
+
+  //rimuovo coaster dal comparatore
+  const removeFromComparison = (coasterId) => {
+    const idToRemove = String(coasterId);
+    setComparisonList((prev) => prev.filter((id) => id !== idToRemove));
+  };
+
+  //ripulisco il comparatore
+  const clearComparison = () => {
+    setComparisonList([]);
+  };
+
   const value = {
     coaster,
     loading,
     error,
     fetchCoasters,
+    comparisonList,
+    addToComparison,
+    removeFromComparison,
+    clearComparison,
   };
 
   return (
