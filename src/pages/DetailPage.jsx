@@ -7,7 +7,8 @@ const DetailPage = () => {
   const [coasterDetail, setCoasterDetail] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { coaster } = useGlobalContext();
+  const { coaster, addToComparison, removeFromComparison, isInComparison } =
+    useGlobalContext();
   const [favorites, setFavorites] = useState(() => {
     //inizializzo i preferiti da localstorage
     const storedFavorites = localStorage.getItem("favoriteCoasters");
@@ -176,8 +177,21 @@ const DetailPage = () => {
           </div>
 
           <div className="mt-8 flex space-x-4">
-            <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-green-600 active:translate-y-1 my-3">
-              Aggiungi al confronto
+            <button
+              className={`${
+                isInComparison(coasterDetail.id)
+                  ? "bg-green-700"
+                  : "bg-green-500"
+              } text-white px-4 py-2 rounded hover:bg-green-600 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-green-600 active:translate-y-1 my-3`}
+              onClick={() =>
+                isInComparison(coasterDetail.id)
+                  ? removeFromComparison(coasterDetail.id)
+                  : addToComparison(coasterDetail.id)
+              }
+            >
+              {isInComparison(coasterDetail.id)
+                ? "Rimuovi dal confronto"
+                : "Aggiungi al confronto"}
             </button>
             <button
               className={`${

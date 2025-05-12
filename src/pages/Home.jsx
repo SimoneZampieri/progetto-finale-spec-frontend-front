@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 
 const Home = () => {
-  const context = useGlobalContext();
-  const { coaster, loading, error } = context;
+  const { coaster, loading, error, addToComparison, removeFromComparison, isInComparison } = useGlobalContext();
 
   const [filteredCoasters, setFilteredCoasters] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -199,8 +198,16 @@ const Home = () => {
                   >
                     Vedi dettagli
                   </Link>
-                  <button className="bg-green-500 text-black font-luckiest px-3 py-1 rounded hover:bg-green-600 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-green-600 active:translate-y-1 my-3">
-                    Confronta
+                  <button 
+                    className={`${
+                      isInComparison(item.id) ? "bg-green-700" : "bg-green-500"
+                    } text-black font-luckiest px-3 py-1 rounded hover:bg-green-600 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-green-600 active:translate-y-1 my-3`}
+                    onClick={() => isInComparison(item.id) 
+                      ? removeFromComparison(item.id) 
+                      : addToComparison(item.id)
+                    }
+                  >
+                    {isInComparison(item.id) ? "Rimuovi confronto" : "Confronta"}
                   </button>
                 </div>
               </div>

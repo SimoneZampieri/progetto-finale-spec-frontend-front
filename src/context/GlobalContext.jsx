@@ -116,6 +116,11 @@ export const GlobalProvider = ({ children }) => {
     setComparisonList((prev) => prev.filter((id) => id !== idToRemove));
   };
 
+  //check se il coaster è nel comparatore
+  const isInComparison = (coasterId) => {
+    return comparisonList.includes(String(coasterId));
+  };
+
   //ripulisco il comparatore
   const clearComparison = () => {
     setComparisonList([]);
@@ -130,6 +135,7 @@ export const GlobalProvider = ({ children }) => {
     addToComparison,
     removeFromComparison,
     clearComparison,
+    isInComparison,
   };
 
   return (

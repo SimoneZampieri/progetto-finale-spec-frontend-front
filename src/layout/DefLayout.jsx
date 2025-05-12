@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { useGlobalContext } from "../context/GlobalContext";
 
 export const Layout = ({ children }) => {
+  const { comparisonList } = useGlobalContext();
   return (
     <div className="flex flex-col min-h-screen">
       <header className="bg-orange-500 text-black shadow-md">
@@ -26,6 +28,11 @@ export const Layout = ({ children }) => {
                   className="hover:text-blue-200 font-luckiest"
                 >
                   Confronta
+                  {comparisonList.length > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {comparisonList.length}
+                    </span>
+                  )}
                 </Link>
               </li>
               <li>
