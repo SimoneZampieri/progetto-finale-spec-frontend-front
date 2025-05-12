@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import DetailPage from "./pages/DetailPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import ComparisonPage from "./pages/ComparisonPage";
+import CoasterList from "./pages/CoasterList";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/coasters" element={<CoasterList />} />
             <Route path="/compare" element={<ComparisonPage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/rollercoaster/:id" element={<DetailPage />} />
