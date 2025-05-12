@@ -15,7 +15,7 @@ const ComparisonPage = () => {
   const [comparisonCoasters, setComparisonCoasters] = useState([]);
 
   useEffect(() => {
-    if (coaster && coaster.lenght > 0) {
+    if (coaster && coaster.length > 0) {
       const coastersToCompare = coaster.filter((coaster) =>
         comparisonList.includes(String(coaster.id))
       );
@@ -29,7 +29,7 @@ const ComparisonPage = () => {
   const getAllProperties = () => {
     const properties = new Set();
     comparisonCoasters.forEach((coaster) => {
-      Object.keys(coster).forEach((key) => {
+      Object.keys(coaster).forEach((key) => {
         if (!["id", "createdAt", "updatedAt", "img"].includes(key)) {
           properties.add(key);
         }
