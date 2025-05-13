@@ -70,18 +70,13 @@ const CoasterList = () => {
 
     if (category && category !== "") {
       results = results.filter((item) => item.category === category);
-      c;
     }
 
     if (park && park !== "") {
-      const currentParks = [...new Set(results.map((item) => item.park))];
-
       results = results.filter((item) => item.park === park);
     }
 
     if (lift && lift !== "") {
-      const currentLifts = [...new Set(results.map((item) => item.lift))];
-
       results = results.filter((item) => item.lift === lift);
     }
 

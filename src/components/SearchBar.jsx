@@ -18,6 +18,23 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
     });
   };
 
+  // Add a reset function to clear all filters
+  const resetFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("");
+    setSelectedPark("");
+    setSelectedLift("");
+    setSortBy("");
+    // Trigger search with empty filters
+    onSearch({
+      searchTerm: "",
+      category: "",
+      park: "",
+      lift: "",
+      sortBy: "",
+    });
+  };
+
   return (
     <div className="bg-white p-4 rounded-lg shadow-md mb-6">
       <form onSubmit={handleSearch} className="space-y-4">
@@ -38,6 +55,14 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
           >
             Cerca
           </button>
+
+          <button
+            type="button"
+            onClick={resetFilters}
+            className="px-6 py-2 bg-gray-300 text-gray-700 font-luckiest rounded-md hover:bg-gray-400 transition-colors drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:translate-y-1 cursor-pointer"
+          >
+            Reset
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -48,7 +73,9 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
             <select
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              onChange={(e) => {
+                setSelectedCategory(e.target.value);
+              }}
             >
               <option value="">Tutte le categorie</option>
               {Array.isArray(categories) &&

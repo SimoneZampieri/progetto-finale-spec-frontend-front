@@ -79,7 +79,7 @@ const DetailPage = () => {
     );
 
   return (
-    <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden my-2 ">
       <div className="md:flex">
         <div className="md:w-1/2">
           {coasterDetail.img ? (
