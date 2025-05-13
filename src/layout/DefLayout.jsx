@@ -24,7 +24,10 @@ export const Layout = ({ children }) => {
                 </Link>
               </li>
               <li>
-                <Link to="/coasters" className="hover:text-blue-200 font-luckiest">
+                <Link
+                  to="/coasters"
+                  className="hover:text-blue-200 font-luckiest"
+                >
                   Coasters
                 </Link>
               </li>
@@ -47,6 +50,11 @@ export const Layout = ({ children }) => {
                   className="hover:text-blue-200 font-luckiest"
                 >
                   Preferiti
+                </Link>
+              </li>
+              <li>
+                <Link to="/manage" className="hover: text:blue-200">
+                  Gestisci
                 </Link>
               </li>
             </ul>
