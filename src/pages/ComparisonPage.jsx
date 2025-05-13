@@ -52,7 +52,7 @@ const ComparisonPage = () => {
             Non hai ancora aggiunto coaster da confrontare!
           </p>
           <Link
-            to="/"
+            to="/coasters"
             className="bg-orange-500 text-black font-luckiest px-4 py-2 rounded hover:bg-orange-700 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-orange-600 active:translate-y-1"
           >
             Torna alla lista

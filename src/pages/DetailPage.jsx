@@ -209,7 +209,7 @@ const DetailPage = () => {
               )}
             </button>
             <Link
-              to="/"
+              to="/coasters"
               className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-gray-600 active:translate-y-1 my-3"
             >
               Torna alla lista

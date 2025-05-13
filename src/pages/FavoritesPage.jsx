@@ -55,7 +55,7 @@ const FavoritesPage = () => {
             Non hai ancora aggiunto preferiti!
           </p>
           <Link
-            to="/"
+            to="/coasters"
             className="bg-orange-500 text-black font-luckiest px-4 py-2 rounded hover:bg-orange-700"
           >
             Torna alla lista
