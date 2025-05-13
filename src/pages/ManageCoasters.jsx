@@ -48,6 +48,7 @@ const ManageCoasters = () => {
       speed: "",
       lift: "",
       description: "",
+      state: "",
       img: "",
     });
     setEditingCoaster(null);
@@ -84,16 +85,24 @@ const ManageCoasters = () => {
 
       const method = editingCoaster ? "PUT" : "POST";
 
-      // converto numeri prima di mandarli
       const dataToSend = {
-        ...formData,
+        title: formData.title,
+        category: formData.category,
+        park: formData.park || "",
+        openingYear: formData.openingYear ? Number(formData.openingYear) : null,
+        maker: formData.maker || "",
         height: formData.height ? Number(formData.height) : null,
         length: formData.length ? Number(formData.length) : null,
-        speed: formData.speed ? Number(formData.speed) : null,
         inversions: formData.inversions ? Number(formData.inversions) : null,
-        openingYear: formData.openingYear ? Number(formData.openingYear) : null,
-        img: formData.img || null,
+        speed: formData.speed ? Number(formData.speed) : null,
+        lift: formData.lift || "",
+        state: "Operativo",
+        description: formData.description || "",
+        img: formData.img || "",
       };
+
+      console.log("mando dati alla api (senza wrapper):", dataToSend);
+      console.log("api url", apiUrl);
 
       const response = await fetch(apiUrl, {
         method,
@@ -104,11 +113,24 @@ const ManageCoasters = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(
-          errorData?.message ||
-            `Error ${response.status}: ${response.statusText}`
-        );
+        // Get the full error response text
+        const errorText = await response.text();
+        console.log("Error response text:", errorText);
+
+        try {
+          // Try to parse as JSON if possible
+          const errorData = JSON.parse(errorText);
+          throw new Error(
+            errorData?.message ||
+              errorData?.error ||
+              `Error ${response.status}: ${response.statusText}`
+          );
+        } catch (parseError) {
+          // If not JSON, use the raw text
+          throw new Error(
+            `Error ${response.status}: ${response.statusText} - ${errorText}`
+          );
+        }
       }
 
       //aggiorno lista
