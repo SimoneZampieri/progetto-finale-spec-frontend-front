@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useGlobalContext } from "../context/GlobalContext";
 
 const DetailPage = () => {
+  //estraggo id da url
   const { id } = useParams();
   const [coasterDetail, setCoasterDetail] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -125,7 +126,6 @@ const DetailPage = () => {
                 </dd>
               </div>
 
-              {/* Rest of the details remain the same */}
               <div className="sm:col-span-1">
                 <dt className="text-sm font-medium text-gray-500">
                   Produttore

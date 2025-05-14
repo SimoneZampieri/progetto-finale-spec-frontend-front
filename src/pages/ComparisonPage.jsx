@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useGlobalContext } from "../context/GlobalContext";
 
 const ComparisonPage = () => {
+  //estraggo valori dal context
   const {
     coaster,
     loading,
@@ -12,8 +13,10 @@ const ComparisonPage = () => {
     clearComparison,
   } = useGlobalContext();
 
+  //mantengo i coaster da confrontare
   const [comparisonCoasters, setComparisonCoasters] = useState([]);
 
+  //se ci sono coaster da confrontare li aggiungo al confronto
   useEffect(() => {
     if (coaster && coaster.length > 0) {
       const coastersToCompare = coaster.filter((coaster) =>
@@ -27,14 +30,19 @@ const ComparisonPage = () => {
 
   //prendo tutte le proprietà dei coasters
   const getAllProperties = () => {
+    //assicuro unicità con Set
     const properties = new Set();
     comparisonCoasters.forEach((coaster) => {
+      //per ogni coaster prendo tutte le proprietà
       Object.keys(coaster).forEach((key) => {
+        //escludo quelle non rilevanti
         if (!["id", "createdAt", "updatedAt", "img"].includes(key)) {
+          //aggiungo le proprietà al set
           properties.add(key);
         }
       });
     });
+    //riconverto set in array
     return Array.from(properties);
   };
 

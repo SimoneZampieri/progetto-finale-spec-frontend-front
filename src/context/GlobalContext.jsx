@@ -34,6 +34,7 @@ export const GlobalProvider = ({ children }) => {
       let data = await response.json();
       console.log("API Response:", data);
 
+      //creo un array di promise per ogni coaster
       let Promises = [];
       data.map((coaster) => {
         Promises.push(fetch(`${API_URL}/${resourceType}/${coaster.id}`));
@@ -60,9 +61,11 @@ export const GlobalProvider = ({ children }) => {
       // aggiorno data con le info dettagliate
       data = extractedData;
 
+      //check se c'è almeno un coaster nell'array data
       if (data.length > 0) {
         console.log("First coaster properties:", Object.keys(data[0]));
 
+        //definisco le proprietà che ci si aspetta
         const expectedProps = [
           "id",
           "title",
@@ -72,9 +75,12 @@ export const GlobalProvider = ({ children }) => {
           "height",
           "length",
         ];
+
+        //controllo se ci sono prop. mancanti
         const missingProps = expectedProps.filter(
           (prop) => !data[0].hasOwnProperty(prop)
         );
+        //se mancano invio un errore
         if (missingProps.length > 0) {
           console.warn("Missing properties in coaster data:", missingProps);
         }

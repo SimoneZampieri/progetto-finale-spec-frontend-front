@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { useGlobalContext } from "../context/GlobalContext";
 
 const ManageCoasters = () => {
@@ -9,7 +9,7 @@ const ManageCoasters = () => {
   const [error, setError] = useState(null);
   const [editingCoaster, setEditingCoaster] = useState(null);
 
-  // Fix 1: Initialize all form fields with empty strings instead of undefined
+  // inzializzo tutti i campi del form come stringhe vuote
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -24,7 +24,6 @@ const ManageCoasters = () => {
     description: "",
     img: "",
   });
-  const navigate = useNavigate();
 
   useEffect(() => {
     setCoasters(coaster || []);
@@ -35,6 +34,7 @@ const ManageCoasters = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  //resetto i campi del form riportandoli a stringhe vuote
   const resetForm = () => {
     setFormData({
       title: "",
@@ -54,9 +54,12 @@ const ManageCoasters = () => {
     setEditingCoaster(null);
   };
 
+  //funzione per gestire modifica coaster
   const handleEdit = (coaster) => {
+    //id del coaster da modificare
     setEditingCoaster(coaster.id);
     setFormData({
+      //popolo form con i dati del coaster
       title: coaster.title || "",
       category: coaster.category || "",
       park: coaster.park || "",
@@ -79,12 +82,15 @@ const ManageCoasters = () => {
 
     try {
       const API_URL = import.meta.env.VITE_API_URL;
+      //determino l'url in base all'id
       const apiUrl = editingCoaster
         ? `${API_URL}/rollercoasters/${editingCoaster}`
         : `${API_URL}/rollercoasters`;
 
+      //determino il metodo sempre in base id
       const method = editingCoaster ? "PUT" : "POST";
 
+      //dati da inviare
       const dataToSend = {
         title: formData.title,
         category: formData.category,
@@ -101,11 +107,9 @@ const ManageCoasters = () => {
         img: formData.img || "",
       };
 
-      console.log("mando dati alla api (senza wrapper):", dataToSend);
-      console.log("api url", apiUrl);
-
+      //richiesta http
       const response = await fetch(apiUrl, {
-        method,
+        method, //post o put
         headers: {
           "Content-Type": "application/json",
         },
@@ -113,12 +117,12 @@ const ManageCoasters = () => {
       });
 
       if (!response.ok) {
-        // Get the full error response text
+        // messaggio di errore completo
         const errorText = await response.text();
         console.log("Error response text:", errorText);
 
         try {
-          // Try to parse as JSON if possible
+          // parse del testo in json se disponibile
           const errorData = JSON.parse(errorText);
           throw new Error(
             errorData?.message ||
@@ -126,7 +130,7 @@ const ManageCoasters = () => {
               `Error ${response.status}: ${response.statusText}`
           );
         } catch (parseError) {
-          // If not JSON, use the raw text
+          // testo grezzo se parse fallisce
           throw new Error(
             `Error ${response.status}: ${response.statusText} - ${errorText}`
           );
@@ -146,6 +150,7 @@ const ManageCoasters = () => {
 
   //logica di cancellazione record
   const handleDelete = async (id) => {
+    //conferma cancellazione
     if (!window.confirm("Sei sicuro di voler eliminare questo coaster??")) {
       return;
     }

@@ -7,6 +7,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
   const [selectedLift, setSelectedLift] = useState("");
   const [sortBy, setSortBy] = useState("");
 
+  //gestione del submit
   const handleSearch = (e) => {
     e.preventDefault();
     onSearch({
@@ -18,14 +19,14 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
     });
   };
 
-  // Add a reset function to clear all filters
+  // funzione di reset per i filtri
   const resetFilters = () => {
     setSearchTerm("");
     setSelectedCategory("");
     setSelectedPark("");
     setSelectedLift("");
     setSortBy("");
-    // Trigger search with empty filters
+    // ricerca senza filtri
     onSearch({
       searchTerm: "",
       category: "",
