@@ -1,6 +1,12 @@
 import { useState } from "react";
 
+/**
+ * Componente SearchBar
+ * Barra di ricerca avanzata con filtri per categoria, parco e tipo di sollevamento
+ * Permette anche di ordinare i risultati secondo diversi criteri
+ */
 const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
+  // Stati per i vari campi di ricerca e filtri
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedPark, setSelectedPark] = useState("");
@@ -10,6 +16,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
   //gestione del submit
   const handleSearch = (e) => {
     e.preventDefault();
+    // Invoca la callback con tutti i parametri di ricerca
     onSearch({
       searchTerm,
       category: selectedCategory,
@@ -21,6 +28,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
 
   // funzione di reset per i filtri
   const resetFilters = () => {
+    // Resetta tutti gli stati locali
     setSearchTerm("");
     setSelectedCategory("");
     setSelectedPark("");
@@ -39,7 +47,9 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md mb-6">
       <form onSubmit={handleSearch} className="space-y-4">
+        {/* Riga superiore con campo di ricerca e pulsanti */}
         <div className="flex flex-col md:flex-row gap-4 items-center">
+          {/* Campo di ricerca testuale */}
           <div className="flex-grow">
             <input
               type="text"
@@ -50,6 +60,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
             />
           </div>
 
+          {/* Pulsante di ricerca */}
           <button
             type="submit"
             className="px-6 py-2 bg-orange-500 text-white font-luckiest rounded-md hover:bg-orange-600 transition-colors drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] active:bg-orange-600 active:translate-y-1 cursor-pointer"
@@ -57,6 +68,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
             Cerca
           </button>
 
+          {/* Pulsante di reset */}
           <button
             type="button"
             onClick={resetFilters}
@@ -66,7 +78,9 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
           </button>
         </div>
 
+        {/* Griglia di filtri avanzati */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Filtro per categoria */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Categoria
@@ -79,6 +93,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
               }}
             >
               <option value="">Tutte le categorie</option>
+              {/* Mapping dinamico delle categorie disponibili */}
               {Array.isArray(categories) &&
                 categories.map((category, index) => (
                   <option key={index} value={category}>
@@ -88,6 +103,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
             </select>
           </div>
 
+          {/* Filtro per parco */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Parco
@@ -98,6 +114,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
               onChange={(e) => setSelectedPark(e.target.value)}
             >
               <option value="">Tutti i parchi</option>
+              {/* Mapping dinamico dei parchi disponibili */}
               {Array.isArray(parks) &&
                 parks.map((park, index) => (
                   <option key={index} value={park}>
@@ -107,6 +124,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
             </select>
           </div>
 
+          {/* Filtro per tipo di sollevamento */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Tipo di sollevamento
@@ -117,6 +135,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
               onChange={(e) => setSelectedLift(e.target.value)}
             >
               <option value="">Tutti i tipi</option>
+              {/* Mapping dinamico dei tipi di sollevamento disponibili */}
               {Array.isArray(lifts) &&
                 lifts.map((lift, index) => (
                   <option key={index} value={lift}>
@@ -126,6 +145,7 @@ const SearchBar = ({ onSearch, categories = [], parks = [], lifts = [] }) => {
             </select>
           </div>
 
+          {/* Opzioni di ordinamento */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Ordina per

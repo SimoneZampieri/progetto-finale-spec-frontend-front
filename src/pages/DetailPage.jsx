@@ -2,8 +2,13 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useGlobalContext } from "../context/GlobalContext";
 
+/**
+ * Componente DetailPage
+ * Visualizza i dettagli completi di un singolo coaster
+ * Permette di aggiungere/rimuovere dai preferiti e dal confronto
+ */
 const DetailPage = () => {
-  //estraggo id da url
+  // Estraggo id da url
   const { id } = useParams();
   const [coasterDetail, setCoasterDetail] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -11,26 +16,35 @@ const DetailPage = () => {
   const { coaster, addToComparison, removeFromComparison, isInComparison } =
     useGlobalContext();
   const [favorites, setFavorites] = useState(() => {
-    //inizializzo i preferiti da localstorage
+    // Inizializzo i preferiti da localStorage
     const storedFavorites = localStorage.getItem("favoriteCoasters");
     return storedFavorites ? JSON.parse(storedFavorites) : [];
   });
 
-  //funzione che aggiunge/rimuove dai preferiti
+  /**
+   * Aggiunge o rimuove un coaster dai preferiti
+   * @param {string|number} coasterId - ID del coaster da aggiungere/rimuovere
+   */
   const toggleFavorite = (coasterId) => {
-    // converto l'id in stringa
+    // Converto l'id in stringa per consistenza
     const idToToggle = String(coasterId);
 
     setFavorites((prevFavorites) => {
+      // Se l'ID è già nei preferiti lo rimuovo, altrimenti lo aggiungo
       const newFavorites = prevFavorites.includes(idToToggle)
         ? prevFavorites.filter((id) => id !== idToToggle)
         : [...prevFavorites, idToToggle];
 
-      //salvo in localstorage
+      // Salvo in localStorage per persistenza tra sessioni
       localStorage.setItem("favoriteCoasters", JSON.stringify(newFavorites));
       return newFavorites;
     });
   };
+
+  /**
+   * Effect che carica i dettagli del coaster dall'API
+   * Si attiva quando cambia l'ID nell'URL
+   */
   useEffect(() => {
     const fetchCoasterDetail = async () => {
       try {
@@ -44,6 +58,7 @@ const DetailPage = () => {
 
         const data = await response.json();
         console.log("Coaster detail data:", data);
+        // Verifico che i dati siano validi e nella struttura attesa
         if (data && data.success && data.rollercoaster) {
           setCoasterDetail(data.rollercoaster);
         } else {
@@ -62,6 +77,7 @@ const DetailPage = () => {
     fetchCoasterDetail();
   }, [id]);
 
+  // Gestione degli stati di caricamento ed errore
   if (loading)
     return (
       <div className="text-center font-luckiest py-8">
@@ -82,6 +98,7 @@ const DetailPage = () => {
   return (
     <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden my-2 ">
       <div className="md:flex">
+        {/* Sezione immagine (metà sinistra su desktop) */}
         <div className="md:w-1/2">
           {coasterDetail.img ? (
             <>
@@ -104,7 +121,9 @@ const DetailPage = () => {
           )}
         </div>
 
+        {/* Sezione dettagli (metà destra su desktop) */}
         <div className="p-8 md:w-1/2">
+          {/* Intestazione con categoria e titolo */}
           <div className="uppercase tracking-wide text-sm text-orange-500 font-semibold">
             {coasterDetail.category}
           </div>
@@ -115,6 +134,7 @@ const DetailPage = () => {
             {coasterDetail.park}, {coasterDetail.state}
           </p>
 
+          {/* Griglia di specifiche tecniche */}
           <div className="mt-6 border-t border-gray-200 pt-4">
             <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
               <div className="sm:col-span-1">

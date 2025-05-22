@@ -2,14 +2,22 @@ import React, { useState, useEffect } from "react";
 
 import { useGlobalContext } from "../context/GlobalContext";
 
+/**
+ * Componente ManageCoasters
+ * Interfaccia amministrativa per la gestione CRUD dei coaster
+ * Permette di aggiungere, modificare ed eliminare coaster
+ */
 const ManageCoasters = () => {
+  // Estraggo i dati e le funzioni necessarie dal contesto globale
   const { coaster, fetchCoasters } = useGlobalContext();
+  
+  // Stati locali per gestire i coaster e lo stato dell'interfaccia
   const [coasters, setCoasters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [editingCoaster, setEditingCoaster] = useState(null);
 
-  // inzializzo tutti i campi del form come stringhe vuote
+  // Inizializzo tutti i campi del form come stringhe vuote
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -25,16 +33,26 @@ const ManageCoasters = () => {
     img: "",
   });
 
+  /**
+   * Effect che aggiorna lo stato locale quando cambiano i dati nel contesto
+   */
   useEffect(() => {
     setCoasters(coaster || []);
   }, [coaster]);
 
+  /**
+   * Gestisce i cambiamenti nei campi del form
+   * @param {Event} e - Evento di input
+   */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  //resetto i campi del form riportandoli a stringhe vuote
+  /**
+   * Resetta il form ai valori iniziali
+   * Utilizzato dopo un salvataggio o per annullare una modifica
+   */
   const resetForm = () => {
     setFormData({
       title: "",
@@ -51,15 +69,20 @@ const ManageCoasters = () => {
       state: "",
       img: "",
     });
+    // Resetta lo stato di modifica
     setEditingCoaster(null);
   };
 
-  //funzione per gestire modifica coaster
+  /**
+   * Prepara il form per la modifica di un coaster esistente
+   * @param {Object} coaster - Il coaster da modificare
+   */
   const handleEdit = (coaster) => {
-    //id del coaster da modificare
+    // Imposta l'ID del coaster da modificare
     setEditingCoaster(coaster.id);
+    // Popola il form con i dati del coaster selezionato
+    // Per ogni campo, usa l'operatore || "" per gestire valori null o undefined
     setFormData({
-      //popolo form con i dati del coaster
       title: coaster.title || "",
       category: coaster.category || "",
       park: coaster.park || "",
@@ -75,6 +98,10 @@ const ManageCoasters = () => {
     });
   };
 
+  /**
+   * Gestisce l'invio del form per creare o aggiornare un coaster
+   * @param {Event} e - Evento di submit
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -82,15 +109,15 @@ const ManageCoasters = () => {
 
     try {
       const API_URL = import.meta.env.VITE_API_URL;
-      //determino l'url in base all'id
+      // Determina l'URL in base all'operazione (modifica o creazione)
       const apiUrl = editingCoaster
         ? `${API_URL}/rollercoasters/${editingCoaster}`
         : `${API_URL}/rollercoasters`;
 
-      //determino il metodo sempre in base id
+      // Determina il metodo HTTP in base all'operazione
       const method = editingCoaster ? "PUT" : "POST";
 
-      //dati da inviare
+      // Prepara i dati da inviare, convertendo i valori numerici
       const dataToSend = {
         title: formData.title,
         category: formData.category,
@@ -102,14 +129,14 @@ const ManageCoasters = () => {
         inversions: formData.inversions ? Number(formData.inversions) : null,
         speed: formData.speed ? Number(formData.speed) : null,
         lift: formData.lift || "",
-        state: "Operativo",
+        state: "Operativo", // Valore predefinito
         description: formData.description || "",
         img: formData.img || "",
       };
 
-      //richiesta http
+      // Effettua la richiesta HTTP
       const response = await fetch(apiUrl, {
-        method, //post o put
+        method, // POST o PUT
         headers: {
           "Content-Type": "application/json",
         },
@@ -117,12 +144,12 @@ const ManageCoasters = () => {
       });
 
       if (!response.ok) {
-        // messaggio di errore completo
+        // Gestione avanzata degli errori
         const errorText = await response.text();
         console.log("Error response text:", errorText);
 
         try {
-          // parse del testo in json se disponibile
+          // Tenta di analizzare la risposta come JSON
           const errorData = JSON.parse(errorText);
           throw new Error(
             errorData?.message ||
@@ -130,14 +157,14 @@ const ManageCoasters = () => {
               `Error ${response.status}: ${response.statusText}`
           );
         } catch (parseError) {
-          // testo grezzo se parse fallisce
+          // Se l'analisi JSON fallisce, usa il testo grezzo
           throw new Error(
             `Error ${response.status}: ${response.statusText} - ${errorText}`
           );
         }
       }
 
-      //aggiorno lista
+      // Aggiorna la lista dei coaster dopo un'operazione riuscita
       await fetchCoasters();
       resetForm();
     } catch (err) {
@@ -148,9 +175,12 @@ const ManageCoasters = () => {
     }
   };
 
-  //logica di cancellazione record
+  /**
+   * Gestisce l'eliminazione di un coaster
+   * @param {string|number} id - ID del coaster da eliminare
+   */
   const handleDelete = async (id) => {
-    //conferma cancellazione
+    // Richiede conferma all'utente prima di procedere
     if (!window.confirm("Sei sicuro di voler eliminare questo coaster??")) {
       return;
     }
@@ -159,6 +189,7 @@ const ManageCoasters = () => {
 
     try {
       const API_URL = import.meta.env.VITE_API_URL;
+      // Effettua la richiesta DELETE
       const response = await fetch(`${API_URL}/rollercoasters/${id}`, {
         method: "DELETE",
       });
@@ -166,6 +197,7 @@ const ManageCoasters = () => {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
 
+      // Aggiorna la lista dopo l'eliminazione
       await fetchCoasters();
     } catch (err) {
       setError(err.message);
@@ -180,6 +212,7 @@ const ManageCoasters = () => {
         Gestisci Coasters
       </h1>
 
+      {/* Visualizza eventuali errori */}
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           {error}
@@ -187,6 +220,7 @@ const ManageCoasters = () => {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Sezione form per aggiunta/modifica */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-luckiest mb-4">
             {editingCoaster ? "Modifica Coaster" : "Aggiungi Nuovo Coaster"}
@@ -194,6 +228,7 @@ const ManageCoasters = () => {
 
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              {/* Campo titolo */}
               <div>
                 <label className="block text-gray-700 mb-1">Titolo *</label>
                 <input
@@ -206,6 +241,7 @@ const ManageCoasters = () => {
                 />
               </div>
 
+              {/* Campo categoria */}
               <div>
                 <label className="block text-gray-700 mb-1">Categoria *</label>
                 <input
@@ -218,6 +254,7 @@ const ManageCoasters = () => {
                 />
               </div>
 
+              {/* Campo parco */}
               <div>
                 <label className="block text-gray-700 mb-1">Parco</label>
                 <input
@@ -229,6 +266,7 @@ const ManageCoasters = () => {
                 />
               </div>
 
+              {/* Campo produttore */}
               <div>
                 <label className="block text-gray-700 mb-1">Produttore</label>
                 <input
@@ -240,6 +278,7 @@ const ManageCoasters = () => {
                 />
               </div>
 
+              {/* Campo altezza */}
               <div>
                 <label className="block text-gray-700 mb-1">Altezza (m)</label>
                 <input
@@ -251,6 +290,7 @@ const ManageCoasters = () => {
                 />
               </div>
 
+              {/* Campo lunghezza */}
               <div>
                 <label className="block text-gray-700 mb-1">
                   Lunghezza (m)
@@ -264,6 +304,7 @@ const ManageCoasters = () => {
                 />
               </div>
 
+              {/* Campo velocità */}
               <div>
                 <label className="block text-gray-700 mb-1">
                   Velocità (km/h)
@@ -277,6 +318,7 @@ const ManageCoasters = () => {
                 />
               </div>
 
+              {/* Campo tipo di lift */}
               <div>
                 <label className="block text-gray-700 mb-1">Tipo di Lift</label>
                 <input
@@ -288,6 +330,7 @@ const ManageCoasters = () => {
                 />
               </div>
 
+              {/* Campo inversioni */}
               <div>
                 <label className="block text-gray-700 mb-1">Inversioni</label>
                 <input
@@ -299,6 +342,7 @@ const ManageCoasters = () => {
                 />
               </div>
 
+              {/* Campo anno di apertura */}
               <div>
                 <label className="block text-gray-700 mb-1">Anno</label>
                 <input
@@ -310,6 +354,7 @@ const ManageCoasters = () => {
                 />
               </div>
 
+              {/* Campo immagine */}
               <div>
                 <label className="block text-gray-700 mb-1">Immagine</label>
                 <input
@@ -323,6 +368,7 @@ const ManageCoasters = () => {
               </div>
             </div>
 
+            {/* Campo descrizione */}
             <div className="mb-4">
               <label className="block text-gray-700 mb-1">Descrizione</label>
               <textarea
@@ -334,6 +380,7 @@ const ManageCoasters = () => {
               ></textarea>
             </div>
 
+            {/* Pulsanti di azione */}
             <div className="flex gap-2">
               <button
                 type="submit"
@@ -347,6 +394,7 @@ const ManageCoasters = () => {
                   : "Aggiungi"}
               </button>
 
+              {/* Pulsante annulla visibile solo in modalità modifica */}
               {editingCoaster && (
                 <button
                   type="button"
@@ -360,6 +408,7 @@ const ManageCoasters = () => {
           </form>
         </div>
 
+        {/* Sezione lista coaster esistenti */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-luckiest mb-4">Coasters Esistenti</h2>
 
@@ -376,18 +425,21 @@ const ManageCoasters = () => {
                   </tr>
                 </thead>
                 <tbody>
+                  {/* Iterazione su tutti i coaster esistenti */}
                   {coasters.map((item) => (
                     <tr key={item.id} className="border-b">
                       <td className="py-2 px-4">{item.title}</td>
                       <td className="py-2 px-4">{item.category}</td>
                       <td className="py-2 px-4">
                         <div className="flex gap-2">
+                          {/* Pulsante modifica */}
                           <button
                             onClick={() => handleEdit(item)}
                             className="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
                           >
                             Modifica
                           </button>
+                          {/* Pulsante elimina */}
                           <button
                             onClick={() => handleDelete(item.id)}
                             className="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600"
