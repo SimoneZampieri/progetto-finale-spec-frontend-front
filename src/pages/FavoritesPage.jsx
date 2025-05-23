@@ -41,7 +41,6 @@ const FavoritesPage = () => {
 
   /**
    * Rimuove un coaster dalla lista dei preferiti
-   * @param {string|number} coasterId - ID del coaster da rimuovere
    */
   const removeFromFavorites = (coasterId) => {
     const idToRemove = String(coasterId);

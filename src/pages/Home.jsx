@@ -13,7 +13,6 @@ const Home = () => {
 
   /**
    * Seleziona casualmente fino a 3 coaster da mostrare in evidenza
-   * @returns {Array} Array di coaster selezionati casualmente
    */
   const getFeaturedCoasters = () => {
     // Se non ci sono coaster disponibili, ritorna un array vuoto

@@ -10,7 +10,7 @@ import { useGlobalContext } from "../context/GlobalContext";
 const ManageCoasters = () => {
   // Estraggo i dati e le funzioni necessarie dal contesto globale
   const { coaster, fetchCoasters } = useGlobalContext();
-  
+
   // Stati locali per gestire i coaster e lo stato dell'interfaccia
   const [coasters, setCoasters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +42,6 @@ const ManageCoasters = () => {
 
   /**
    * Gestisce i cambiamenti nei campi del form
-   * @param {Event} e - Evento di input
    */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -75,7 +74,6 @@ const ManageCoasters = () => {
 
   /**
    * Prepara il form per la modifica di un coaster esistente
-   * @param {Object} coaster - Il coaster da modificare
    */
   const handleEdit = (coaster) => {
     // Imposta l'ID del coaster da modificare
@@ -100,7 +98,6 @@ const ManageCoasters = () => {
 
   /**
    * Gestisce l'invio del form per creare o aggiornare un coaster
-   * @param {Event} e - Evento di submit
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -177,7 +174,6 @@ const ManageCoasters = () => {
 
   /**
    * Gestisce l'eliminazione di un coaster
-   * @param {string|number} id - ID del coaster da eliminare
    */
   const handleDelete = async (id) => {
     // Richiede conferma all'utente prima di procedere

@@ -70,12 +70,6 @@ const CoasterList = () => {
 
   /**
    * Gestisce la ricerca e il filtraggio dei coaster
-   * @param {Object} params - Parametri di ricerca e filtro
-   * @param {string} params.searchTerm - Termine di ricerca per il titolo
-   * @param {string} params.category - Categoria selezionata
-   * @param {string} params.park - Parco selezionato
-   * @param {string} params.lift - Tipo di sollevamento selezionato
-   * @param {string} params.sortBy - Criterio di ordinamento
    */
   const handleSearch = ({ searchTerm, category, park, lift, sortBy }) => {
     if (!coaster) return;
@@ -119,7 +113,7 @@ const CoasterList = () => {
           results.sort((a, b) => b.title.localeCompare(a.title));
           break;
         case "length_asc":
-          // Lunghezza crescente (con gestione di valori null/undefined)
+          // Lunghezza crescente
           results.sort(
             (a, b) => (Number(a.length) || 0) - (Number(b.length) || 0)
           );
@@ -208,7 +202,7 @@ const CoasterList = () => {
                     alt={item.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      console.log("Image failed to load:", e.target.src);
+                      console.log("errore caricamento immagine:", e.target.src);
                       e.target.onerror = null;
                       e.target.src =
                         "https://placehold.co/400x200/gray/white?text=No+Image";

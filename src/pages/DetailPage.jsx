@@ -23,7 +23,6 @@ const DetailPage = () => {
 
   /**
    * Aggiunge o rimuove un coaster dai preferiti
-   * @param {string|number} coasterId - ID del coaster da aggiungere/rimuovere
    */
   const toggleFavorite = (coasterId) => {
     // Converto l'id in stringa per consistenza

@@ -41,7 +41,6 @@ const ComparisonPage = () => {
   /**
    * Estrae dinamicamente tutte le proprietà rilevanti dai coaster da confrontare
    * Esclude proprietà non significative per il confronto (id, date, immagini)
-   * @returns {Array} Array di stringhe con i nomi delle proprietà
    */
   const getAllProperties = () => {
     // Uso un Set per garantire l'unicità delle proprietà
